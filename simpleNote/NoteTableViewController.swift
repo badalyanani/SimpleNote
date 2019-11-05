@@ -17,7 +17,6 @@ class NoteTableViewController: UITableViewController, UISearchBarDelegate {
     var managedOjetContext: NSManagedObjectContext? {
         return (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     }
-    let searchController = UISearchController(searchResultsController: nil)
     
     @IBAction func addNewNote(_ sender: UIBarButtonItem) {
         let vc = storyboard?.instantiateViewController(identifier: "ViewControllerID")
@@ -73,21 +72,21 @@ class NoteTableViewController: UITableViewController, UISearchBarDelegate {
         }
     }
     
-     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         let context = UIApplication.appDelegate.persistentContainer.viewContext
-     if editingStyle == .delete {
-        let note = notes[indexPath.row]
-        context.delete(note)
-        UIApplication.appDelegate.saveContext()
-         let request: NSFetchRequest<Note> = Note.fetchRequest()
-               do {
-                   notes = try self.managedOjetContext!.fetch(request)
-                   tableView.reloadData()
-               }
-               catch {
-                   print("Could not fetch notes from CoreData")
-               }
-        tableView.reloadData()
-     }
+        if editingStyle == .delete {
+            let note = notes[indexPath.row]
+            context.delete(note)
+            UIApplication.appDelegate.saveContext()
+            let request: NSFetchRequest<Note> = Note.fetchRequest()
+            do {
+                notes = try self.managedOjetContext!.fetch(request)
+                tableView.reloadData()
+            }
+            catch {
+                print("Could not fetch notes from CoreData")
+            }
+            tableView.reloadData()
+        }
     }
 }
